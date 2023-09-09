@@ -1,0 +1,56 @@
+library(tidyverse)
+library(caret)
+library(readxl)
+
+# 1. prep data
+## 1.1 load data
+df2016 <- read_excel("housepriceINDIA.xlsx", sheet = 1)
+df2017 <- read_excel("housepriceINDIA.xlsx", sheet = 2)
+df1 <- bind_rows(df2016,df2017)
+View(df1)
+df1$log_price <- log(df1$Price)
+
+## 1.2 select column
+full_df <- df1 %>%
+  select(`number of bedrooms`, `Area of the house(excluding basement)`, `Distance from the airport`, `grade of the house`, `Number of schools nearby`, log_price)
+
+## 1.3 clean data (NA value)
+full_df %>%
+  complete.cases() %>%
+  mean()
+
+# 2. split data
+set.seed(66)
+n <- nrow(full_df)
+train_id <- sample(1:n,0.8*n)
+train_df <- full_df[train_id, ]
+test_df <- full_df[-train_id, ]
+
+# 3. train model
+set.seed(25)
+ctrl <- trainControl(
+  method = "cv",
+  number = 5,
+  verboseIter = TRUE
+)
+
+model <- train(log_price ~ .,
+               data = train_df,
+               method = "glmnet",
+               trControl = ctrl)
+model
+
+# 4. score data
+p <- predict(model, newdata = test_df)
+
+# 5. evaluate model => absolute metrix (mae, mse, rmse)  
+
+abs_matrix <- function(actual, pred) {
+  cal_mae <- mean(abs(actual - pred))
+  cal_mse <- mean((actual - pred)**2)
+  cal_rmse <- sqrt(mean((actual - pred)**2))
+  list(mae = cal_mae, mse = cal_mse, rmse = cal_rmse)
+}
+
+test <- abs_matrix(test_df$log_price, p)
+test
