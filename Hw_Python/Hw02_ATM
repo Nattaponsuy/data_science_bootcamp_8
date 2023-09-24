@@ -1,0 +1,61 @@
+## HW02 - class ATM at least 5 methods
+import random
+
+def random_number(n):
+  range_start = 10**(n-1)
+  range_end = (10**n) - 1
+  return random.randint(range_start, range_end)
+
+class ATM:
+    def __init__(self, name, account, balance):
+        self.name = name
+        self.account = account
+        self.balance = balance
+    #method
+    def sign(self, name):
+        confirm = input(f"new your name is {name}. Are you con firm? (Y/N)")
+        if confirm == "Y" :
+            self.name = name
+            print("success, thank!")
+        else : print("thank you")
+
+    def deposit(self, deposit):
+        print(f"do you want to deposit account {self.account} amount : {deposit}.")
+        confirm = input("Y/N : ")
+        if confirm == "Y" :
+            self.balance += deposit
+            print(f"success, your balance is {self.balance}, thank you")
+        else : print("thank you")
+
+    def withdraw(self, withdraw):
+        print(f"do you want to withdraw account {self.account} amount : {withdraw}.")
+        confirm = input("Y/N : ")
+        if confirm == "Y" :
+            self.balance -= withdraw
+            print(f"success, your balance is {self.balance}, thank you")
+        else : print("thank you")
+
+    def transfer(self, trans):
+        des = input("fill account who you want to trasfers : ")
+        print(f"are you want to transfer amount {trans} to account {des} ?")
+        confirm = input("Y/N : ")
+        if confirm == "Y" :
+            self.balance -= trans
+            print(f"success, your balance is {self.balance}, thank you")
+        else : print("thank you")
+
+    def show(self):
+        print(f""" your account Information :
+        name = {self.name}
+        account number = {self.account}
+        balance = {self.balance}
+        thank you
+        """)
+
+# test
+ac1 = ATM("nattapon", random_number(6),5000)
+ac1.deposit(7500)
+ac1.withdraw(7000)
+ac1.transfer(5000)
+ac1.sign("nattapon")
+ac1.show()
