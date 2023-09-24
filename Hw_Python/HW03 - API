@@ -1,0 +1,40 @@
+# เขียนโค้ดดึง public API เช่น star wars API หรือตัวอื่นๆ ใช้ requests และ time.sleep (ตัวเบรกเวลา) ด้วยนะครับ
+import requests
+import time ## decrease force to server
+
+
+planets = []
+
+for i in range(60):
+    url = f"https://swapi.dev/api/planets/{i+1}"
+    resp = requests.get(url)
+    if resp.status_code == 200:
+        json_data = resp.json()
+        planets.append(
+            (json_data["name"],
+             json_data["rotation_period"],
+             json_data["diameter"],
+             json_data["climate"],
+             json_data["gravity"],
+             json_data["terrain"],
+             json_data["population"])
+        )
+    else:
+        charecter.append("error")
+    #break a second
+    time.sleep(1)
+
+import pandas as pd
+
+#create data frame
+planets_database = pd.DataFrame(planets)
+
+col_name = ["name",
+             "rotation_period",
+             "diameter",
+             "climate",
+             "gravity",
+             "terrain",
+             "population"]
+planets_database.columns = col_name
+planets_database.head(2)
