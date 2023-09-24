@@ -1,0 +1,36 @@
+!pip list | grep "gaz" ## to watch all library in python
+from gazpacho import Soup
+import requests
+import pandas as pd
+## web scraping basics
+url = "https://www.imdb.com/search/title/?groups=top_100&sort=user_rating,desc"
+html = requests.get(url)
+imdb = Soup(html.text)
+
+## use for find data attention from web (see in html in web)
+titles = imdb.find("h3", {"class": "lister-item-header"})
+## clean data form web => strip function will clean data html text
+clean_titles = []
+## list comprehension
+clean_titles = [title.strip() for title in titles]
+
+
+## get rating from the website
+## div: rating-imdb-rating
+ratings = imdb.find("div", {"class": "imdb-rating"})
+clean_ratings = [float(rating.strip()) for rating in ratings]
+
+## year
+year = imdb.find("span", {"class": "lister-item-year text-muted unbold"})
+clean_year = [int(y.strip().replace("(","").replace(")","")) for y in year]
+
+import pandas as pd
+
+#create data frame
+movie_database = pd.DataFrame(data = {
+    "title": clean_titles,
+    "movie year": clean_year,
+    "rating": clean_ratings
+})
+## print first 5 row
+movie_database.head()
