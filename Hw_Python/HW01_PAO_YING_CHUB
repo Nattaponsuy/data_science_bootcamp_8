@@ -1,1 +1,61 @@
+# def function
+## HW01 - Pao Ying Chub Game!
+choice  = ["P","S","H"]
+def citeria(x,y):
+    if x == "H" and y == "H":
+        print("tie!")
+        return "t"
+    elif x == "H" and y == "S":
+        print("win!")
+        return "w"
+    elif x == "H" and y == "P":
+        print("lose!")
+        return "l"
+    elif x == "S" and y == "S":
+        print("tie!")
+        return "t"
+    elif x == "S" and y == "P":
+        print("win!")
+        return "w"
+    elif x == "S" and y == "H":
+        print("lose!")
+        return "l"
+    elif x == "P" and y == "P":
+        print("tie!")
+        return "t"
+    elif x == "P" and y == "H":
+        print("win!")
+        return "w"
+    elif x == "P" and y == "S":
+        print("lose!")
+        return "l"
+    else:
+        print("Your fill incorrect word please fill again!")
+        return " "
+citeria("P","S")
 
+# loop
+from random import sample
+win = 0
+lose = 0
+tie = 0
+while True:
+    print("""Welcome to PAO YING CHUB GAME :
+    return your selected H(hammer) P(Paper) or S(Scissor) if you want to stop fill word quit""")
+    guess = input("your turn : ")
+    com = sample(choice,1)
+    if guess == 'quit':
+        print(f"summary : win : {win}, lose : {lose} , tie : {tie}")
+        break
+    else:
+        print(f"your competitor select {com[0]} you are ")
+        count = citeria(guess,com[0])
+        if count == "w":
+            win += 1
+        elif count == "l":
+            lose += 1
+        elif count == "t":
+            tie += 1
+        else:
+            print("")
+        print(" ")
